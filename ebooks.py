@@ -1,36 +1,35 @@
 import random;
 import sys;
 import pdb;
-import twitter;
+
 import codecs;
-import ConfigParser
+
         
 
-def get_statuses(user):
-    statuses = []
-    api = twitter.Api()
-    max_id = None
-    total = 0
-    while True:
-        timeline = api.GetUserTimeline(user, count=75, max_id=max_id)
-        newCount = ignCount = 0
-        for s in timeline:
-                statuses.append(s.text)
-                newCount += 1
-        total += newCount
-        print "Fetched %d/%d new/total." % (
-            newCount, total)
-        if newCount == 0:
-            break
-        max_id = min([s.id for s in timeline]) - 1
+# def get_statuses(user):
+#     statuses = []
+#     max_id = None
+#     total = 0
+#     while True:
+#         timeline = api.GetUserTimeline(user, count=75, max_id=max_id)
+#         newCount = ignCount = 0
+#         for s in timeline:
+#                 statuses.append(s.text)
+#                 newCount += 1
+#         total += newCount
+# # "Fetched %d/%d new/total." % (
+#  #           newCount, total)
+#         if newCount == 0:
+#             break
+#         max_id = min([s.id for s in timeline]) - 1
     
-    statusfile = open('/home/r/Projects/ebooks/'+user, 'w')
-    for i in statuses:
-        statusfile.write(i.encode('utf-8')+'\n')
-    statusfile.close()
+#     statusfile = open('/home/r/Projects/ebooks/'+user, 'w')
+#     for i in statuses:
+#         statusfile.write(i.encode('utf-8')+'\n')
+#     statusfile.close()
 
-    statuses = open('/home/r/Projects/ebooks/'+user, 'r')
-    return statuses
+#     statuses = open('/home/r/Projects/ebooks/'+user, 'r')
+# return statuses
 
 def generate_sentence(table, startwords):
     stopsentence = ('.', '!', '?',) # Cause a "new sentence" if found at the end of a word
@@ -54,7 +53,7 @@ def generate_sentence(table, startwords):
         else:
             sentence.append(newword)
         w1, w2 = w2, newword
-    print entropy, len(sentence)
+    print(entropy, len(sentence))
     return (" ".join(sentence), entropy/len(sentence))
 
 def generate_table(input):
@@ -84,27 +83,27 @@ def generate_table(input):
             w1, w2 = w2, word
     return (table, startwords)
 
-def post_tweets(user, message):
-    ebooks_cfg_parser = ConfigParser.ConfigParser()
-    ebooks_cfg_parser.read('/home/r/Projects/ebooks/ebooks.cfg')
-    user_key = ebooks_cfg_parser.get(user, 'access_token_key')
-    user_secret = ebooks_cfg_parser.get(user, 'access_token_secret')
+# def post_tweets(user, message):
+#     ebooks_cfg_parser = ConfigParser.ConfigParser()
+#     ebooks_cfg_parser.read('/home/r/Projects/ebooks/ebooks.cfg')
+#     user_key = ebooks_cfg_parser.get(user, 'access_token_key')
+#     user_secret = ebooks_cfg_parser.get(user, 'access_token_secret')
 
-    api = twitter.Api(consumer_key='86eHOajQM074C9n5415Wfw', consumer_secret='uMQcE8oWXsWJHFVhBktLQlpqKuf6BQZtOdgY8B95wk', access_token_key=user_key, access_token_secret=user_secret)
-    status = api.PostUpdate(message)
-    print status.text
-    return None
+#     api = twitter.Api(consumer_key='86eHOajQM074C9n5415Wfw', consumer_secret='uMQcE8oWXsWJHFVhBktLQlpqKuf6BQZtOdgY8B95wk', access_token_key=user_key, access_token_secret=user_secret)
+#     status = api.PostUpdate(message)
+# #    print status.text
+#     return None
 
 user = sys.argv[1]
 entropy = 1 
 try:
-    input = open('/home/r/Projects/ebooks/'+user, 'r')
+    input = open(user, 'r')
 except IOError:
-    input = get_statuses(user)
+    print("error")
 
 table, startwords = generate_table(input)
 
 while entropy <= 1:
     tweet, entropy = generate_sentence(table, startwords)
-post_tweets(user, tweet)
+print(tweet)
 
