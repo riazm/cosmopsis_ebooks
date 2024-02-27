@@ -92,7 +92,6 @@ def generate_table(input):
 #     user_key = ebooks_cfg_parser.get(user, 'access_token_key')
 #     user_secret = ebooks_cfg_parser.get(user, 'access_token_secret')
 
-#     api = twitter.Api(consumer_key='86eHOajQM074C9n5415Wfw', consumer_secret='uMQcE8oWXsWJHFVhBktLQlpqKuf6BQZtOdgY8B95wk', access_token_key=user_key, access_token_secret=user_secret)
 #     status = api.PostUpdate(message)
 # #    print status.text
 #     return None
