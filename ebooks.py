@@ -83,13 +83,13 @@ def do_stuff():
     root.after(500, check_for_updates)
     root.after(750, do_stuff)
 
-prev_prompts = 1
+
 def check_for_updates():
     global prev_prompts
     prompts = int(requests.get("http://209.250.230.169:8000/myapp/prompt_count/").text)
     if prompts > prev_prompts:
         print("found " +str(prompts-prev_prompts)+ " new prompts, adding to bot")
-        for prompt in range(prev_prompts, prompts+1):
+        for prompt in range(prev_prompts+1, prompts+1):
             prompt_text = requests.get("http://209.250.230.169:8000/myapp/prompt/"+str(prompt)).text
             bot.add_input(prompt_text)
     prev_prompts = prompts 
@@ -105,7 +105,7 @@ bot = markov_bot()
 bot.generate_table(input)
 
 seed(42)
-
+prev_prompts = 0
 
 root = tk.Tk()
 root.wm_overrideredirect(True)
