@@ -87,7 +87,7 @@ def do_stuff():
 def check_for_updates():
     global prev_prompts
     try:
-        prompts = int(requests.get("http://209.250.230.169:8000/myapp/prompt_count/").text)
+        prompts = int(requests.get("http://209.250.230.169:8000/myapp/prompt_last/").text)
     except:
         print("WARNING couldn't connect to prompt server")
         prompts = 0;
@@ -112,7 +112,7 @@ bot = markov_bot()
 bot.generate_table(input)
 
 seed(42)
-prev_prompts = 0
+prev_prompts = int(requests.get("http://209.250.230.169:8000/myapp/prompt_first/").text)
 
 root = tk.Tk()
 root.wm_overrideredirect(True)
