@@ -86,12 +86,19 @@ def do_stuff():
 
 def check_for_updates():
     global prev_prompts
-    prompts = int(requests.get("http://209.250.230.169:8000/myapp/prompt_count/").text)
+    try:
+        prompts = int(requests.get("http://209.250.230.169:8000/myapp/prompt_count/").text)
+    except:
+        print("WARNING couldn't connect to prompt server")
+        prompts = 0;
     if prompts > prev_prompts:
         print("found " +str(prompts-prev_prompts)+ " new prompts, adding to bot")
         for prompt in range(prev_prompts+1, prompts+1):
-            prompt_text = requests.get("http://209.250.230.169:8000/myapp/prompt/"+str(prompt)).text
-            bot.add_input(prompt_text)
+            try:
+                prompt_text = requests.get("http://209.250.230.169:8000/myapp/prompt/"+str(prompt)).text
+                bot.add_input(prompt_text)
+            except:
+                print("WARNING couldn't get prompt" + str(prompt) + " for some reason")
     prev_prompts = prompts 
 
 source = sys.argv[1]
