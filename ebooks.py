@@ -82,9 +82,17 @@ def do_stuff():
     root.after(500, check_for_updates)
     root.after(750, do_stuff)
 
+prev_prompts = 1
 def check_for_updates():
-    prompts = requests.get("http://209.250.230.169:8000/myapp/prompt_count/").text
-    
+    global prev_prompts
+    prompts = int(requests.get("http://209.250.230.169:8000/myapp/prompt_count/").text)
+    if prompts > prev_prompts:
+        print("found " +str(prompts-prev_prompts)+ " new prompts, adding to bot")
+        for prompt in range(prev_prompts, prompts+1):
+            prompt_text = requests.get("http://209.250.230.169:8000/myapp/prompt/"+str(prompt)).text
+            print(prompt_text, prompt)
+            bot.add_input(prompt_text)
+    prev_prompts = prompts 
 
 source = sys.argv[1]
 
@@ -104,7 +112,7 @@ root.wm_overrideredirect(True)
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 root.bind("<Button-1>", lambda evt: root.destroy())
 
-l = tk.Label(text='', font=("Helvetica", 60))
+l = tk.Label(text='', font=("Oxygen", 60))
 l.pack(expand=True)
 
 do_stuff()
