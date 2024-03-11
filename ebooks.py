@@ -74,8 +74,8 @@ def do_stuff():
     colors = ('red', 'yellow', 'green', 'cyan', 'blue', 'magenta')    
     entropy = 1 
     # only update if we managed to get somethnig that's new
-    #while entropy <= 1:
-    tweet, entropy = bot.generate_sentence()
+    while entropy <= 1:
+        tweet, entropy = bot.generate_sentence()
 
     s = tweet
     color = choice(colors)
