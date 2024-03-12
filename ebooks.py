@@ -71,17 +71,17 @@ class markov_bot:
 
 
 def do_stuff():
-    colors = ('red', 'yellow', 'green', 'cyan', 'blue', 'magenta')    
+    colors = ("#f857e5", "#fdd02c", "#6ee78a", "#ff8201", "#3fb2e9")
     entropy = 1 
     # only update if we managed to get somethnig that's new
-    while entropy <= 1:
+    while entropy <= 200:
         tweet, entropy = bot.generate_sentence()
 
     s = tweet
     color = choice(colors)
     l.config(text=s, fg=color)
     root.after(500, check_for_updates)
-    root.after(750, do_stuff)
+    root.after(1000, do_stuff)
 
 
 def check_for_updates():
