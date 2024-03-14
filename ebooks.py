@@ -38,7 +38,7 @@ class markov_bot:
 
         print(entropy, sentence)
         return (" ".join(sentence), entropy/len(sentence))
-    
+
     def generate_table(self, input):
         stopsentence = ('.', '!', '?',) # Cause a "new sentence" if found at the end of a word
         
@@ -74,20 +74,20 @@ def do_stuff():
     colors = ("#f857e5", "#fdd02c", "#6ee78a", "#ff8201", "#3fb2e9")
     entropy = 1 
     # only update if we managed to get somethnig that's new
-    while entropy <= 200:
+    while entropy <= 1:
         tweet, entropy = bot.generate_sentence()
 
     s = tweet
     color = choice(colors)
     l.config(text=s, fg=color)
-    root.after(500, check_for_updates)
+    root.after(10000, check_for_updates)
     root.after(1000, do_stuff)
 
 
 def check_for_updates():
     global prev_prompts
     try:
-        prompts = int(requests.get("http://209.250.230.169:8000/myapp/prompt_last/").text)
+        prompts = int(requests.get("http://faust-bot.co.uk/prompt_last/").text)
     except:
         print("WARNING couldn't connect to prompt server")
         prompts = 0;
@@ -95,7 +95,7 @@ def check_for_updates():
         print("found " +str(prompts-prev_prompts)+ " new prompts, adding to bot")
         for prompt in range(prev_prompts+1, prompts+1):
             try:
-                prompt_text = requests.get("http://209.250.230.169:8000/myapp/prompt/"+str(prompt)).text
+                prompt_text = requests.get("http://faust-bot.co.uk/prompt/"+str(prompt)).text
                 bot.add_input(prompt_text)
             except:
                 print("WARNING couldn't get prompt" + str(prompt) + " for some reason")
@@ -112,7 +112,11 @@ bot = markov_bot()
 bot.generate_table(input)
 
 seed(42)
-prev_prompts = int(requests.get("http://209.250.230.169:8000/myapp/prompt_first/").text)
+try: 
+    prev_prompts = int(requests.get("http://faust-bot.co.uk/prompt_first/").text)
+except:
+    prev_prompts = 0
+    print("Warning couldn't connect to prompt server")
 
 root = tk.Tk()
 root.wm_overrideredirect(True)
