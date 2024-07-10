@@ -9,7 +9,7 @@ def do_stuff():
     s = ''.join([choice(ascii_letters) for i in range(10)])
     color = choice(colors)
     l.config(text=s, fg=color)
-    root.after(100, do_stuff)
+    root.after(500, do_stuff)
 
 root = tk.Tk()
 root.wm_overrideredirect(True)
