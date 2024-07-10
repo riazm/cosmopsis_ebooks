@@ -29,8 +29,10 @@ class markov_bot:
             entropy += len(selection)
             if newword in stopsentence:
                 # if the last word ALREADY ended in a stop sentence, just return the sentence, don't bother trying to pad it with more punctuation
-                if sentence[-1][-1] in stopsentence:
-                    break
+
+                if len(sentence) > 0 and len(sentence[-1]) > 0:
+                    if sentence[-1][-1] in stopsentence:
+                        break
                 sentence[-1] = sentence[-1]+newword
             else:
                 sentence.append(newword)
